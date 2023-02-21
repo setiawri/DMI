@@ -41,7 +41,7 @@
         
         <hr class="style-three" />
         <footer>
-            <p>&copy; <%: DateTime.Now.Year %> <%: DMIWeb.Tools.getAppSettingsValue("CompanyName").ToUpper() %></p>
+            <p>&copy; <%: DateTime.Now.Year %> <%: DMIWeb.Tools.getAppSettingsValue("CompanyName").ToUpper() %> - ver. <%: DMIWeb.Settings.version %></p>
         </footer>
     </form>
 </body>

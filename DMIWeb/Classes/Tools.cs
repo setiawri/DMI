@@ -11,38 +11,25 @@ namespace DMIWeb
         /*******************************************************************************************************/
         #region DATE MANIPULATORS
 
-        public static string getStartDate(string text)
-        {
-            DateTime dt;
-            if (DateTime.TryParse(text, out dt))
-                return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0).ToString();
-            else
-                return null;
-        }
-
-        public static string getEndDate(string text)
-        {
-            DateTime dt;
-            if (DateTime.TryParse(text, out dt))
-                return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0).AddDays(1).ToString();
-            else
-                return null;
-        }
-
         public static string getStartDate(string text, string format)
         {
-            DateTime dt;
-            if (DateTime.TryParseExact(text, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
-                return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0).ToString();
-            else
-                return null;
+            return string.Format("{0:MM/dd/yy}", getDateTime(text, format));
         }
 
         public static string getEndDate(string text, string format)
         {
+            DateTime? dt = getDateTime(text, format);
+            if (dt != null)
+                return string.Format("{0:MM/dd/yy}", ((DateTime)dt).AddDays(1));
+            else
+                return null;
+        }
+
+        public static DateTime? getDateTime(string text, string format)
+        {
             DateTime dt;
             if (DateTime.TryParseExact(text, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
-                return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0).AddDays(1).ToString();
+                return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
             else
                 return null;
         }
