@@ -28,7 +28,23 @@ namespace DMIWeb
         protected void btnLogin_OnClick(object sender, EventArgs e)
         {
             DBUtil.sanitize(txtUsername, txtPassword);
-            if(string.IsNullOrWhiteSpace(txtUsername.Text))
+
+			if (Settings.isDevEnvironment())
+			{
+				if (txtUsername.Text == "liveserver")
+                {
+					Settings.ConnectToLiveRemoteServer = true;
+					txtUsername.Text = "admin";
+				}
+
+				if (string.IsNullOrWhiteSpace(txtUsername.Text))
+					txtUsername.Text = "admin";
+
+                if (string.IsNullOrWhiteSpace(txtPassword.Text))
+                    txtPassword.Text = UserAccount.ADMINPASSWORD;
+            }
+
+			if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
                 Page.SetFocus(txtUsername);
                 message.error("Silahkan lengkapi username");
@@ -47,7 +63,14 @@ namespace DMIWeb
                 message.error("Invalid username atau password");
                 Page.SetFocus(txtUsername);
             }
-            else if (!userAccount.isCorrectPassword(txtPassword.Text))
+            else if (!userAccount.Active)
+            {
+				message.error("Account user "+userAccount.Username+" dalam status tidak aktif.");
+				txtUsername.Text = "";
+				txtPassword.Text = "";
+				Page.SetFocus(txtUsername);
+			}
+			else if (!userAccount.isCorrectPassword(txtPassword.Text))
             {
                 message.error("Invalid username atau password");
                 Page.SetFocus(txtPassword);
@@ -55,8 +78,11 @@ namespace DMIWeb
             else
             {
                 userAccount.redirectToOriginalPage();
-                Response.Redirect(Request.QueryString["returnUrl"]);
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["returnUrl"]))
+                    Response.Redirect(Request.QueryString["returnUrl"]);
+                else
+                    Response.Redirect("~/");
             }
-        }
+		}
     }
 }

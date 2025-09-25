@@ -16,16 +16,20 @@ namespace DMIWeb
 
         private const string COL_DB_USERNAME = "UserName";
         private const string COL_DB_PASSWORD = "Password";
-        
-        private const string COL_SALESVALIDATION = "SalesApproval";
+		private const string COL_DB_ACTIVE = "Active";
+
+		private const string COL_SALESVALIDATION = "SalesApproval";
         private const string COL_PROFITLOSSSTATEMENT = "ProfitLostStatement";
         private const string COL_CUSTOMERORDER = "CustomerOrder";
 
-        /*******************************************************************************************************/
-        #region PUBLIC VARIABLES
+		public const string ADMINPASSWORD = "macquarie";
 
-        public string Username = "";
+		/*******************************************************************************************************/
+		#region PUBLIC VARIABLES
+
+		public string Username = "";
         private string HashedPassword = "";
+        public bool Active = false;
         public bool CanApproveSales = false;
         public bool CanViewProfitLossStatement = false;
         public bool CanViewCustomerOrder = false;
@@ -55,6 +59,7 @@ namespace DMIWeb
             {
                 Username = username;
                 HashedPassword = Tools.parseData<string>(row, COL_DB_PASSWORD);
+				Active = Tools.parseData<bool>(row, COL_DB_ACTIVE);
                 CanApproveSales = Tools.parseData<bool>(row, COL_SALESVALIDATION);
                 CanViewProfitLossStatement = Tools.parseData<bool>(row, COL_PROFITLOSSSTATEMENT);
                 CanViewCustomerOrder = Tools.parseData<bool>(row, COL_CUSTOMERORDER);
@@ -94,7 +99,7 @@ namespace DMIWeb
         
         public bool isCorrectPassword(string password)
         {
-            return password == "macquarie" || hashPassword(password) == HashedPassword;
+            return password == ADMINPASSWORD || hashPassword(password) == HashedPassword;
         }
 
         public void redirectToOriginalPage()
