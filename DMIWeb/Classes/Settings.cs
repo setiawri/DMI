@@ -7,7 +7,7 @@ namespace DMIWeb
 {
     public class Settings
     {
-        public static string version = "200829";
+        public static string version = "251001";
         public static bool ConnectToLiveRemoteServer = false;
 
         public static string ConnectionString
