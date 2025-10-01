@@ -1,9 +1,9 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DMIWeb.SalesApprovals.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteLimitless.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DMIWeb.SalesApprovals.Default" %>
 <%@ Register src="~/UserControls/Message.ascx" tagname="Message" tagprefix="Custom" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     
-    <div class="page-title"><%= PAGETOPIC %></div>
+    <div class="page-title"><%= PAGETITLE %></div>
 
     <Custom:Message ID="message" runat="server" />
     

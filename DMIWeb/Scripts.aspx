@@ -1,47 +1,47 @@
 ﻿
 <link rel="shortcut icon" href="#"> <%--remove favicon.ico error--%>
-<script src="assets/js/main/jquery.min.js"></script>
-<script src="assets/js/main/bootstrap.bundle.min.js"></script> <%--@*fix error constructor*@--%>
+<script src="/assets/js/main/jquery.min.js"></script>
+<script src="/assets/js/main/bootstrap.bundle.min.js"></script> <%--@*fix error constructor*@--%>
 
 <!-- Global stylesheets -->
-<link href="assets/font/Roboto.css" rel="stylesheet" />
-<link href="assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
-<link href="assets/css/icons/fontawesome/styles.min.css" rel="stylesheet" />
-<link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
-<link href="assets/css/layout.min.css" rel="stylesheet" type="text/css">
-<link href="assets/css/components.min.css" rel="stylesheet" type="text/css">
-<link href="assets/css/colors.min.css" rel="stylesheet" type="text/css">
-<link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet" />
-<link href="assets/css/animate.min.css" rel="stylesheet" />
+<link href="/assets/font/Roboto.css" rel="stylesheet" />
+<link href="/assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/icons/fontawesome/styles.min.css" rel="stylesheet" />
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/layout.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/components.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/colors.min.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+<link href="/assets/css/animate.min.css" rel="stylesheet" />
 <!-- /global stylesheets -->
 <!-- Plugin -->
-<script src="assets/js/popper.min.js"></script>
-<script src="assets/js/plugins/charts/chart.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/plugins/charts/chart.js"></script>
 
 <!-- /plugin -->
 <!-- Core JS files -->
-<script src="assets/js/plugins/loaders/blockui.min.js"></script>
+<script src="/assets/js/plugins/loaders/blockui.min.js"></script>
 <!-- /core JS files -->
 <!-- Theme JS files -->
-<script src="assets/js/plugins/ui/moment/moment.min.js"></script>
-<script src="assets/js/plugins/pickers/anytime.min.js"></script>
-<script src="assets/js/plugins/pickers/daterangepicker.js"></script>
-<script src="assets/js/plugins/pickers/pickadate/picker.js"></script>
-<script src="assets/js/plugins/pickers/pickadate/picker.date.js"></script>
-<script src="assets/js/plugins/pickers/pickadate/picker.time.js"></script>
-<script src="assets/js/plugins/forms/selects/select2.min.js"></script>
-<script src="assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script src="assets/js/plugins/forms/styling/switchery.min.js"></script>
-<script src="assets/js/plugins/forms/styling/switch.min.js"></script>
-<script src="assets/js/plugins/tables/datatables/datatables.min.js"></script>
-<script src="assets/js/plugins/notifications/bootbox.min.js"></script>
-<script src="assets/js/plugins/forms/number/jquery.number.min.js"></script>
+<script src="/assets/js/plugins/ui/moment/moment.min.js"></script>
+<script src="/assets/js/plugins/pickers/anytime.min.js"></script>
+<script src="/assets/js/plugins/pickers/daterangepicker.js"></script>
+<script src="/assets/js/plugins/pickers/pickadate/picker.js"></script>
+<script src="/assets/js/plugins/pickers/pickadate/picker.date.js"></script>
+<script src="/assets/js/plugins/pickers/pickadate/picker.time.js"></script>
+<script src="/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script src="/assets/js/plugins/forms/styling/switchery.min.js"></script>
+<script src="/assets/js/plugins/forms/styling/switch.min.js"></script>
+<script src="/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script src="/assets/js/plugins/notifications/bootbox.min.js"></script>
+<script src="/assets/js/plugins/forms/number/jquery.number.min.js"></script>
 
-<script src="assets/js/plugins/multiselectdropdown/bootstrap-select.js"></script>
-<link href="assets/js/plugins/multiselectdropdown/bootstrap-select.min.css" rel="stylesheet" />
+<script src="/assets/js/plugins/multiselectdropdown/bootstrap-select.js"></script>
+<link href="/assets/js/plugins/multiselectdropdown/bootstrap-select.min.css" rel="stylesheet" />
 
-<script src="assets/js/app.js"></script>
+<script src="/assets/js/app.js"></script>
 <!-- /theme JS files -->
 <!--Custom Style-->
 <style>

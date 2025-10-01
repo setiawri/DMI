@@ -8,9 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title></title>
-    <!-- #Include virtual="~/Scripts.aspx" -->
 
+    <!-- #Include virtual="~/Scripts.aspx" -->
 </head>
+
 <body class="bg-slate-800">
     <!-- Page content -->
     <div class="page-content">
@@ -55,7 +56,7 @@
                                         </div>--%>
                                         
                                         <div class="form-group mx-4">
-                                            <asp:LinkButton runat="server" ID="btnSubmit" OnClick="btnLogin_OnClick" CssClass="btn btn-primary btn-block">
+                                            <asp:LinkButton runat="server" ID="btnSubmit" OnClick="btnLogin_OnClick" OnClientClick="showLoadingSpinner()" CssClass="btn btn-primary btn-block">
                                                 <i class="icon-circle-right2 mr-1"></i>LOGIN
                                             </asp:LinkButton>
                                         </div>
@@ -88,3 +89,5 @@
 
     });
 </script>
+
+<!-- #Include virtual="~/Javascripts.aspx" -->

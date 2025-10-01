@@ -19,7 +19,7 @@ namespace DMIWeb.SalesApprovals
         /*******************************************************************************************************/
         #region PUBLIC VARIABLES
 
-        protected const string PAGETOPIC = "Sales Approval";
+        protected const string PAGETITLE = "Sales Approval";
 
         #endregion PUBLIC VARIABLES
         /*******************************************************************************************************/
@@ -97,7 +97,7 @@ namespace DMIWeb.SalesApprovals
                     }
 
                     if(isNotValid)
-                        message.display(PAGETOPIC + "Item tidak lagi valid untuk approval/rejection");
+                        message.display(PAGETITLE + "Item tidak lagi valid untuk approval/rejection");
                     else
                     {
                         sql = string.Format(@"
@@ -123,7 +123,7 @@ namespace DMIWeb.SalesApprovals
                     }
                 }
             }
-            catch (Exception ex) { message.error(PAGETOPIC + " gagal di approve. Hubungi administrator. Error: " + ex.Message); }
+            catch (Exception ex) { message.error(PAGETITLE + " gagal di approve. Hubungi administrator. Error: " + ex.Message); }
 
             populatePage();
         }

@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Web;
-using System.Globalization;
-using System.Web.Configuration;
 using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Web;
+using System.Web.Configuration;
 
 namespace DMIWeb
 {
@@ -147,8 +148,28 @@ namespace DMIWeb
             }
             return data;
         }
-        
+
+		#endregion
+		/*******************************************************************************************************/
+		#region IMAGE PATH
+
+		public static string getImageUrl(string imageName, HttpRequest Request, HttpServerUtility Server)
+		{
+			string filename = Settings.NOIMAGEFILE;
+			if (!string.IsNullOrEmpty(imageName))
+			{
+				string dir = Server.MapPath(Settings.IMAGEFOLDERPATH);
+				string path = Path.Combine(dir, imageName);
+				if (File.Exists(path))
+					filename = imageName;
+			}
+
+			return (Request.ApplicationPath + Settings.IMAGEFOLDERURL + filename).Replace("//", "/");
+		}
+
         #endregion
-        /*******************************************************************************************************/
-    }
+		/*******************************************************************************************************/
+
+
+	}
 }

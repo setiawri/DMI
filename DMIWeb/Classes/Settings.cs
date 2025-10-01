@@ -10,7 +10,11 @@ namespace DMIWeb
         public static string version = "251001";
         public static bool ConnectToLiveRemoteServer = false;
 
-        public static string ConnectionString
+		public const string IMAGEFOLDERURL = "/assets/img/";
+		public const string IMAGEFOLDERPATH = "~" + IMAGEFOLDERURL;
+		public const string NOIMAGEFILE = "no-image.jpg";
+
+		public static string ConnectionString
         {
             get
             {

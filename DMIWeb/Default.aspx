@@ -6,6 +6,10 @@
 
     <Custom:Message ID="message" runat="server" />
     
+<%--    <form id="form1" defaultbutton="" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                --%>
+
     <div class="page-title">
         DASHBOARD
     </div>
@@ -127,4 +131,6 @@
             </asp:UpdatePanel>--%>
         </asp:Panel>
     </asp:Panel>
+
+<%--    </form>--%>
 </asp:Content>

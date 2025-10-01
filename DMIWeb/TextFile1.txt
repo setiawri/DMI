@@ -1,0 +1,739 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteLimitless.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DMIWeb.Orders.Default" %>
+<%@ Register src="~/UserControls/Message.ascx" tagname="Message" tagprefix="Custom" %>
+<%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="AJAX" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    
+<div class="content-wrapper">
+    <!-- Content area -->
+    <div class="content">
+        
+        <form id="form1" defaultbutton="" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                
+            <!-- Form inputs -->
+            <div class="card animated bounceInLeft">
+                <div class="card-header header-elements-inline pb-1">
+                    <h5 class="card-title text-uppercase"><%= PAGETITLE %></h5>
+
+                    <%--Popover is not working. need to check javascript.aspx page and see if the jquery applyPopovers() is executed --%>
+                    <%--<i class="icon-info22 text-primary ml-2" data-container="body" data-toggle="popover" data-placement="left" data-content=""></i>--%>
+                </div>
+                <div class="card-body" style="min-height:400px;">
+                    
+                    <Custom:Message ID="message" runat="server" />
+                    
+                    <div class="row mx-0">
+
+                        <div class="row ml-0 mr-2">
+                            <div class="row mb-0 mx-0 flex-1 justify-content-between">
+                                <label class="mb-0">Customer</label>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <asp:CheckBox ID="chkHasPendingOrders" AutoPostBack="true" OnCheckedChanged="chkHasPendingOrders_CheckedChanged" CssClass="" runat="server" />
+                                    </label>
+                                    <label class="mb-0">hanya ada order</label>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <asp:DropDownList id="ddlCustomers" CssClass="select2" OnSelectedIndexChanged="ddlCustomers_SelectedIndexChanged" AutoPostBack="true" style="height:auto;" runat="server" />
+                            </div>
+                        </div>
+
+                        <div class="row ml-0 mr-2" style="width:120px;">
+                            <label class="mb-0">Keyword</label>
+                            <div class="input-group">
+                                <asp:TextBox ID="txtKeyword" CssClass="form-control" runat="server" />
+                                <%--<asp:LinkButton ID="lbtnClearKeyword" OnClick="lbtnClearKeyword_Click" Text="X" CssClass="clear-textbox" runat="server" />--%>
+                            </div>
+                        </div>
+                                
+                        <div class="row ml-0 mr-2">
+                            <label class="mb-0"><%= _CategoryName %></label>
+                            <div class="input-group">
+                                <asp:DropDownList id="ddlCategory" CssClass="select2" runat="server" />
+                            </div>
+                        </div>
+                                
+                        <div class="row ml-0 mr-2">
+                            <label class="mb-0"><%= _TypeName %></label>
+                            <div class="input-group">
+                                <asp:DropDownList id="ddlType" CssClass="select2" style="height:auto;" runat="server" />
+                            </div>
+                        </div>
+                                
+                        <div class="row ml-0 mr-2">
+                            <label class="mb-0">Show/page</label>
+                            <div class="input-group">
+                                <asp:DropDownList ID="ddlPageSizes" CssClass="custom-select" runat="server">
+                                    <asp:ListItem Text="5" Value="5" />
+                                    <asp:ListItem Text="10" Value="10" />
+                                    <asp:ListItem Text="25" Value="25" />
+                                    <asp:ListItem Text="50" Value="50" />
+                                </asp:DropDownList>
+                            </div>
+                        </div>
+
+                        <div class="ml-0 mr-2">
+                            <label class="mb-0">&nbsp;</label>
+                            <asp:Button ID="btnFilter" Text="FILTER" OnClick="btnFilter_Click" CssClass="btn btn-outline-primary form-control" runat="server" />
+                        </div>
+                    </div>
+                    
+                    <asp:UpdatePanel ID="upFilter" runat="server">
+                        <ContentTemplate>
+                            
+                            <div>
+                                <table>
+                                    <tr><td>
+                                        <asp:Panel ID="pnlInventoryPaging1" Visible="false" runat="server">
+                                            <asp:Button ID="btnFirst1" OnClick="btnFirst_Click" Text="<<" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" /> 
+                                            <asp:Button ID="btnPrevious1" OnClick="btnPrevious_Click" Text="<" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" />
+                                            Page <asp:Label ID="lblPageIndex1" runat="server" /> of <asp:Label ID="lblPageCount1" runat="server" />
+                                            <asp:Button ID="btnNext1" OnClick="btnNext_Click" Text=">" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" /> 
+                                            <asp:Button ID="btnLast1" OnClick="btnLast_Click" Text=">>" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" />
+                                        </asp:Panel>
+                                        </td>
+                                    </tr>
+                                    <tr><td>
+                                        <div class="orders-inventory">
+                                            <asp:Label ID="lblInventoryHasNoData" Text="Tidak ada data. Silahkan rubah filter." CssClass="rounded-div" style="background-color:blanchedalmond;" Visible="false" runat="server" />
+                                            <asp:Repeater ID="rptInventory" OnItemCommand="rptInventory_ItemCommand" runat="server">                    
+                                                <HeaderTemplate>
+                                                    <div style="border-bottom:1px solid lightgrey;"></div>
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <div style="padding-top:5px; padding-bottom:5px;border-bottom:1px solid lightgray;">
+                                                        <a name='<%# Eval("['InventoryID']") %>' />
+                                                        <asp:Panel ID="pnlInventoryItem" Enabled='<%# Eval("PendingOrderQuantity") == DBNull.Value %>' runat="server">
+                                                            <div class="info oneline">
+                                                                <div class="text-bold">Kode:</div><%# Eval("['InventoryID']") %>
+                                                                &nbsp; &nbsp;<div class="text-bold"><%= _CategoryName %>:</div> <%# Eval("['CategoryName']") %>
+                                                                &nbsp; &nbsp;<div class="text-bold"><%= _TypeName %>:</div> <%# Eval("['TypeName']") %>
+                                                                &nbsp; &nbsp;<div class="text-bold">Price:</div> <span id="spanPrice" runat="server"><%# string.Format("{0:N2}",Eval("['Price']")) %></span><%# "/"+Eval("['Unit']") %>
+                                                            </div>
+                                                            <div class="info oneline">
+                                                                <asp:Label Text='<%# "["+Eval("Quantity")+"]" %>' Visible='<%# chkShowQty.Checked %>' runat="server" />
+                                                                <%# Eval("['InventoryName']") %>
+                                                            </div>
+                                                            <div>
+                                                                Qty:<asp:TextBox ID="txtQty" Text='<%# Eval("PendingOrderQuantity") %>' CssClass="rounded-textbox" Width="45" MaxLength="5" runat="server" />
+
+                                                                <%--&nbsp;Expire:<asp:TextBox ID="txtExpireDate" Text='<%# string.Format("{0:dd/MM/yyyy}", Eval("ExpiredDate")) %>' Enabled="false" CssClass="rounded-textbox" Width="85" runat="server" />
+                                                                <asp:ImageButton ID="ibtnDate" ImageUrl="~/Images/Icons/Calendar_Button.png" CssClass="AJAXCalendarExtender" runat="server" />
+                                                                <AJAX:CalendarExtender ID="calDate" runat="server" 
+                                                                        Enabled="True" TargetControlID="txtExpireDate" Format="dd/MM/yyyy"
+                                                                    PopupButtonID="ibtnDate">
+                                                                </AJAX:CalendarExtender>--%>
+
+                                                                &nbsp;% Disc 1:<asp:TextBox ID="txtDiscount1" Text='<%# Eval("Discount1") %>' CssClass="rounded-textbox" MaxLength="6" Width="50" runat="server" />
+                                                                &nbsp;% Disc 2:<asp:TextBox ID="txtDiscount2" Text='<%# Eval("Discount2") %>' CssClass="rounded-textbox" MaxLength="6" Width="50" runat="server" />
+                                                                &nbsp;<asp:Button ID="btnAdd" Text="ADD" CommandArgument='<%# Eval("InventoryID") %>' CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" />
+                                                            </div>  
+                                                        </asp:Panel>
+                                                    </div>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                    <tr><td>
+                                        <asp:Panel ID="pnlInventoryPaging2" Visible="false" runat="server">
+                                            <asp:Button ID="btnFirst2" OnClick="btnFirst_Click" Text="<<" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" /> 
+                                            <asp:Button ID="btnPrevious2" OnClick="btnPrevious_Click" Text="<" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" />
+                                            Page <asp:Label ID="lblPageIndex2" runat="server" /> of <asp:Label ID="lblPageCount2" runat="server" />
+                                            <asp:Button ID="btnNext2" OnClick="btnNext_Click" Text=">" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" /> 
+                                            <asp:Button ID="btnLast2" OnClick="btnLast_Click" Text=">>" CssClass="rounded-button" style="background-color:whitesmoke;" runat="server" />
+                                            <asp:CheckBox ID="chkShowQty" Checked="false" OnCheckedChanged="chkShowQty_OnCheckedChanged" AutoPostBack="true" runat="server" />
+                                        </asp:Panel>
+                                        </td>
+                                    </tr>        
+                                </table>
+                            </div>
+                            
+                            <div class="row mx-0 h3 mt-2">
+                                Daftar Order<asp:Label ID="lblOrderTotalAmount" CssClass="ml-1" runat="server" />
+                            </div>
+                            
+                            <asp:Label ID="lblOrdersHasNoData" Text="Tidak ada pending orders." CssClass="h5" Visible="false" runat="server" />
+
+                            <div class="row mx-0">
+                                <div class="table-responsive">
+                                    <asp:Repeater ID="rptOrders" OnItemCommand="rptOrders_ItemCommand" runat="server">                    
+                                        <HeaderTemplate>
+                                            <table class="table table-hover datatable">
+                                                <thead>
+                                                    <th style="width:50px;"></th>
+                                                    <th>Produk</th>
+                                                    <th>Order</th>
+                                                    <th></th>
+                                                    <th style="width:80px;"></th>
+                                                </thead>
+                                                <tbody>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td class="align-top">
+                                                    <a name='<%# Eval("['InventoryID']") %>' />
+                                                    <%# Eval("['RowNumber']") %>
+                                                </td>
+                                                <td class="align-top">
+                                                    <div>[<%# Eval("['InventoryID']") %>] <%# Eval("['InventoryName']") %></div>
+                                                    <div><%= _CategoryName %>: <%# Eval("['CategoryName']") %></div>
+                                                    <div><%= _TypeName %>: <%# Eval("['TypeName']") %></div>
+                                                    <div>Base Price: <span id="spanPrice" runat="server"><%# string.Format("{0:N2}",Eval("['Price']")) %></span><%# "/"+Eval("['Unit']") %></div>
+                                                    <div><asp:Label Text='<%# "["+Eval("Quantity")+"]" %>' Visible='<%# chkShowQty.Checked %>' runat="server" /></div>
+                                                </td>
+                                                <td class="align-top">
+                                                    <div><%# string.Format("{0:dd/MM/yyyy}", Eval("['OrderDate']")) %></div>
+                                                    <div>Discounted: <span id="spanAdjustedPrice" runat="server"><%# string.Format("{0:N2}",Eval("['AdjustedPrice']")) %></span><%# "/"+Eval("['Unit']") %></div>
+                                                    <div>Total: <span id="spanOrderAmount" runat="server"><%# string.Format("{0:N2}",Eval("['OrderAmount']")) %></span></div>
+                                                </td>
+                                                <td class="text-right">
+                                                    <div>Pending: <asp:TextBox ID="txtPendingQty" Text='<%# Eval("PendingOrderQuantity") %>' CssClass="" MaxLength="5" Width="50" runat="server" /></div>
+                                                    <div class="mt-1">% Disc 1: <asp:TextBox ID="txtDiscount1" Text='<%# Eval("Discount1") %>' CssClass="" MaxLength="6" Width="50" runat="server" /></div>
+                                                    <div class="mt-1">% Disc 2: <asp:TextBox ID="txtDiscount2" Text='<%# Eval("Discount2") %>' CssClass="" MaxLength="6" Width="50" runat="server" /></div>
+                                                </td>
+                                                <td class="align-top">
+                                                    <div><asp:Button ID="btnUpdate" Text="UPDATE" CommandArgument='<%# Eval("CustomerOrderID") %>' CssClass="btn btn-outline-success" style="width:80px;" runat="server" /></div>
+                                                    <div class="mt-1"><asp:Button ID="btnStop" Text="STOP" CommandArgument='<%# Eval("CustomerOrderID") %>' CssClass="btn btn-outline-warning" style="width:80px;" runat="server" /></div>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                                </tbody>
+                                            </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                </div>
+                            </div>
+            
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+
+                </div>
+            </div>
+        
+        </form>
+    </div>
+    <!-- /content area -->
+</div>
+
+</asp:Content>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+using LIBUtil.Desktop.UserControls;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+
+namespace DMIWeb.Orders
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected const string PAGETITLE = "ORDERS";
+        protected const string RELATIONNAME = "relation";
+
+        protected string _CategoryName = "";
+        protected string _TypeName = "";
+
+        private PagedDataSource _PDS_FilteredInventory = new PagedDataSource();
+        public int NowViewing
+        {
+            get
+            {
+                object obj = ViewState["_NowViewing"];
+                if (obj == null)
+                    return 0;
+                else
+                    return (int)obj;
+            }
+            set
+            {
+                this.ViewState["_NowViewing"] = value;
+            }
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            populateDDLs();
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!Page.IsPostBack)
+            {
+                populateOrdersRepeater();
+            }
+        }
+        
+        private void populateDDLs()
+        {
+            string sqlCalls = "";
+            List<string> tableNames = new List<string>()
+            {
+                "DWSystem.InventoryGroup",
+                "DWSystem.Customer",
+                "DWSystem.InventoryCategory",
+                "DWSystem.InventoryType"
+            };
+            sqlCalls += string.Format(@"
+                SELECT CategoryName, TypeName 
+                FROM DWSystem.InventoryGroup 
+                WHERE GroupID = 1; 
+
+                SELECT Customer.*
+                FROM DWSystem.Customer
+                WHERE 
+                    (SELECT SalesID FROM DWSystem.Operator WHERE UserName='{0}') IS NULL
+                    OR Customer.SalesID = (SELECT SalesID FROM DWSystem.Operator WHERE UserName='{0}')
+                ORDER BY Name ASC;
+
+                SELECT InventoryCategory.*
+                FROM DWSystem.InventoryCategory
+                ORDER BY Name ASC;
+
+                SELECT InventoryType.*
+                FROM DWSystem.InventoryType
+                ORDER BY Name ASC;
+            ", Tools.getCookieData<string>(GlobalVariables.COOKIEDATA_USERNAME));
+            DataSet dataset = DBUtil.getDataSet(sqlCalls);
+
+            DataRow row = dataset.Tables[tableNames.IndexOf("DWSystem.InventoryGroup")].Rows[0];
+
+            _CategoryName = row["CategoryName"].ToString();
+            _TypeName = row["TypeName"].ToString();
+
+            ddlCustomers.DataSource = dataset.Tables[tableNames.IndexOf("DWSystem.Customer")];
+            ddlCustomers.DataValueField = "CustomerID";
+            ddlCustomers.DataTextField = "Name";
+            ddlCustomers.DataBind();
+
+            ddlCategory.DataSource = dataset.Tables[tableNames.IndexOf("DWSystem.InventoryCategory")];
+            ddlCategory.DataValueField = "CategoryID";
+            ddlCategory.DataTextField = "Name";
+			ddlCategory.DataBind();
+			ddlCategory.Items.Insert(0, new ListItem("ALL", ""));
+
+			ddlType.DataSource = dataset.Tables[tableNames.IndexOf("DWSystem.InventoryType")];
+            ddlType.DataValueField = "TypeID";
+            ddlType.DataTextField = "Name";
+            ddlType.DataBind();
+			ddlType.Items.Insert(0, new ListItem("ALL", ""));
+		}
+
+        protected void lbtnClearKeyword_Click(object sender, EventArgs e)
+        {
+            txtKeyword.Text = "";
+        }
+
+        protected void btnFilter_Click(object sender, EventArgs e)
+        {
+            NowViewing = 0;
+            populateInventoryRepeater(false);
+        }
+
+        private void populateInventoryRepeater(bool showLast)
+        {
+            string sql = string.Format(@"
+                DECLARE @FILTER_Keyword varchar(MAX) = '{2}'
+                DECLARE @CategoryID varchar(MAX) = '{3}'
+                DECLARE @TypeID varchar(MAX) = '{4}'
+
+	            -- drop table if already exists
+	            IF(SELECT object_id('TempDB..#TEMP_PendingOrders')) IS NOT NULL
+		            DROP TABLE #TEMP_PendingOrders
+		
+	            SELECT * INTO #TEMP_PendingOrders 
+                FROM (
+                    SELECT CustomerOrder.*
+                    FROM DWSystem.CustomerOrder
+                        LEFT OUTER JOIN DWSystem.Inventory ON Inventory.InventoryID = CustomerOrder.InventoryID
+                    WHERE CustomerOrder.CustomerID='{0}' 
+                        AND (CustomerOrder.Stop = 0 OR CustomerOrder.Stop IS NULL)
+                        AND CustomerOrder.DeliveredQuantity < CustomerOrder.Quantity
+                ) AS x
+
+                SELECT Inventory.*,
+                    InventoryCategory.Name AS CategoryName,
+                    InventoryType.Name AS TypeName,
+                    #TEMP_PendingOrders.Quantity - #TEMP_PendingOrders.DeliveredQuantity AS PendingOrderQuantity,
+                    #TEMP_PendingOrders.Discount1,
+                    #TEMP_PendingOrders.Discount2,
+                    #TEMP_PendingOrders.ExpiredDate,
+					ISNULL(InventoryStock.Stock,0) AS Quantity,
+					InventoryUnit.Unit AS Unit
+                FROM DWSystem.Inventory
+                    LEFT OUTER JOIN DWSystem.InventoryCategory ON InventoryCategory.CategoryID = Inventory.CategoryID
+                    LEFT OUTER JOIN DWSystem.InventoryType ON InventoryType.TypeID = Inventory.TypeID
+                    LEFT OUTER JOIN #TEMP_PendingOrders ON #TEMP_PendingOrders.InventoryID = Inventory.InventoryID
+					LEFT OUTER JOIN DWSystem.InventoryUnit ON InventoryUnit.UnitID = Inventory.UnitID
+					LEFT OUTER JOIN (
+							SELECT InventoryID, SUM(Stock) AS Stock
+							FROM DWSystem.WarehouseStock
+                            WHERE WarehouseStock.WarehouseID IN (SELECT WarehouseID FROM DWSystem.WarehouseAccess WHERE UserName = '{1}')
+							GROUP BY InventoryID					
+						) InventoryStock ON InventoryStock.InventoryID = Inventory.InventoryID
+                WHERE 1=1
+    				AND (@FILTER_Keyword IS NULL OR (
+                        Inventory.InventoryName LIKE '%'+@FILTER_Keyword+'%' 
+                        AND Inventory.InventoryID LIKE '%'+@FILTER_Keyword+'%' 
+                    ))
+                    AND (@CategoryID IS NULL OR Inventory.CategoryID=@CategoryID)
+                    AND (@TypeID IS NULL OR Inventory.TypeID=@TypeID)
+                ORDER BY InventoryName ASC;
+	
+	            -- clean up
+	            DROP TABLE #TEMP_PendingOrders
+            ", ddlCustomers.SelectedValue, 
+                ((SiteLimitless)this.Master).username,
+				LIBUtil.Util.wrapNullable(txtKeyword.Text.Trim()),
+				LIBUtil.Util.wrapNullable(ddlCategory.SelectedValue),
+                LIBUtil.Util.wrapNullable(ddlType.SelectedValue)
+			);
+            _PDS_FilteredInventory.DataSource = DBUtil.getData(sql).DefaultView;
+            _PDS_FilteredInventory.PageSize = Convert.ToInt16(ddlPageSizes.SelectedValue);
+            _PDS_FilteredInventory.AllowPaging = true;
+
+            if (showLast)
+                NowViewing = _PDS_FilteredInventory.PageCount - 1;
+
+            _PDS_FilteredInventory.CurrentPageIndex = NowViewing;
+
+            rptInventory.DataSource = _PDS_FilteredInventory;
+            rptInventory.DataBind();
+
+            lblInventoryHasNoData.Visible = rptInventory.Items.Count == 0;
+            rptInventory.Visible = pnlInventoryPaging1.Visible = pnlInventoryPaging2.Visible = rptInventory.Items.Count > 0;            
+            lblPageIndex1.Text = lblPageIndex2.Text = (NowViewing + 1).ToString();
+            lblPageCount1.Text = lblPageCount2.Text = _PDS_FilteredInventory.PageCount.ToString();
+            btnPrevious1.Enabled = btnFirst1.Enabled = btnPrevious2.Enabled = btnFirst2.Enabled = !_PDS_FilteredInventory.IsFirstPage;
+            btnNext1.Enabled = btnLast1.Enabled = btnNext2.Enabled = btnLast2.Enabled = !_PDS_FilteredInventory.IsLastPage;
+        }
+
+        private void populateOrdersRepeater()
+        {
+            string sql = string.Format(@"
+                SELECT CustomerOrder.*,
+                    Inventory.InventoryName AS InventoryName,
+                    InventoryCategory.Name AS CategoryName,
+                    InventoryType.Name AS TypeName,
+					InventoryUnit.Unit AS Unit,
+                    CustomerOrder.Quantity - CustomerOrder.DeliveredQuantity AS PendingOrderQuantity,
+                    CustomerOrder.Price * (100-Discount1)/100 * (100-Discount2)/100 AS AdjustedPrice,
+                    CustomerOrder.Quantity * (CustomerOrder.Price * (100-Discount1)/100 * (100-Discount2)/100) AS OrderAmount,
+                    ROW_NUMBER() OVER (ORDER BY InventoryName ASC) AS RowNumber
+                FROM DWSystem.CustomerOrder
+                    LEFT OUTER JOIN DWSystem.Inventory ON Inventory.InventoryID = CustomerOrder.InventoryID
+                    LEFT OUTER JOIN DWSystem.InventoryCategory ON InventoryCategory.CategoryID = Inventory.CategoryID
+                    LEFT OUTER JOIN DWSystem.InventoryType ON InventoryType.TypeID = Inventory.TypeID
+					LEFT OUTER JOIN DWSystem.InventoryUnit ON InventoryUnit.UnitID = Inventory.UnitID
+                WHERE CustomerOrder.CustomerID='{0}' 
+                    AND (Stop = 0 OR Stop IS NULL)
+                    AND CustomerOrder.Quantity - CustomerOrder.DeliveredQuantity > 0 
+                ORDER BY InventoryName ASC;
+            ", ddlCustomers.SelectedValue);
+            DataTable data = DBUtil.getData(sql);
+            rptOrders.DataSource = data;
+            rptOrders.DataBind();
+
+            lblOrdersHasNoData.Visible = rptOrders.Items.Count == 0;
+            rptOrders.Visible = rptOrders.Items.Count > 0;
+            lblOrderTotalAmount.Text = string.Format("({0:N2})", LIBUtil.Util.compute(data, "SUM", "OrderAmount", ""));
+        }
+
+        protected void btnPrevious_Click(object sender, EventArgs e)
+        {
+            NowViewing--;
+            populateInventoryRepeater(false);
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            NowViewing++;
+            populateInventoryRepeater(false);
+        }
+
+        protected void btnFirst_Click(object sender, EventArgs e)
+        {
+            NowViewing = 0;
+            populateInventoryRepeater(false);
+        }
+
+        protected void btnLast_Click(object sender, EventArgs e)
+        {
+            populateInventoryRepeater(true);
+        }
+
+        protected void rptInventory_ItemCommand(object sender, RepeaterCommandEventArgs e)
+        {
+            if (((Button)e.CommandSource).ID == "btnAdd")
+            {
+                decimal price = 0;
+                if (!Decimal.TryParse(((HtmlGenericControl)e.Item.FindControl("spanPrice")).InnerText, out price))
+                {
+                    message.error("Price is Invalid");
+                    return;
+                }
+                int qty;
+                if(!Int32.TryParse(((TextBox)e.Item.FindControl("txtQty")).Text, out qty))
+                {
+                    message.error("Invalid QTY");
+                    SetFocus(e.Item.FindControl("txtQty"));
+                    return;
+                }
+                //DateTime expiredate = DateTime.Now;
+                //if (!DateTime.TryParseExact(((TextBox)e.Item.FindControl("txtExpireDate")).Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out expiredate))
+                //{
+                //    message.error("Select expire date");
+                //    SetFocus(e.Item.FindControl("txtExpireDate"));
+                //    return;
+                //}
+                decimal discount1 = 0;
+                if (!string.IsNullOrWhiteSpace(((TextBox)e.Item.FindControl("txtDiscount1")).Text) && !Decimal.TryParse(((TextBox)e.Item.FindControl("txtDiscount1")).Text, out discount1))
+                {
+                    message.error("Discount 1 is Invalid");
+                    SetFocus(e.Item.FindControl("txtDiscount1"));
+                    return;
+                }
+                decimal discount2 = 0;
+                if (!string.IsNullOrWhiteSpace(((TextBox)e.Item.FindControl("txtDiscount2")).Text) && !Decimal.TryParse(((TextBox)e.Item.FindControl("txtDiscount2")).Text, out discount2))
+                {
+                    message.error("Discount 2 is Invalid");
+                    SetFocus(e.Item.FindControl("txtDiscount2"));
+                    return;
+                }
+
+                try
+                {
+                    string sql = string.Format(@"
+                            DECLARE @timestamp datetime
+                            SELECT @timestamp=CURRENT_TIMESTAMP
+
+                            INSERT INTO [DWSystem].[CustomerOrder] (
+                                CustomerID,
+                                InventoryID,
+                                Quantity,
+                                DeliveredQuantity,
+                                Price,
+                                Discount1,
+                                Discount2,
+                                Total,
+                                OrderDate,
+                                ExpiredDate,
+                                LastUpdated,
+                                UserID
+                            )
+                            VALUES (
+                                @CustomerID,
+                                @InventoryID,
+                                @Quantity,
+                                0,
+                                @Price,
+                                @Discount1,
+                                @Discount2,
+                                (@Quantity * @Price * (100-@Discount1)/100 * (100-@Discount2)/100),
+                                @timestamp,
+                                null,
+                                @timestamp,
+                                (SELECT ID FROM DWSystem.Operator WHERE UserName = @UserName)
+                            )
+                    ");
+
+                    using (SqlConnection sqlConnection = new SqlConnection(Settings.ConnectionString))
+                    using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.Add("@CustomerID", SqlDbType.VarChar).Value = ddlCustomers.SelectedValue;
+                        cmd.Parameters.Add("@InventoryID", SqlDbType.VarChar).Value = e.CommandArgument.ToString();
+                        cmd.Parameters.Add("@Quantity", SqlDbType.Int).Value = qty;
+                        cmd.Parameters.Add("@Price", SqlDbType.Int).Value = price;
+                        cmd.Parameters.Add("@Discount1", SqlDbType.Decimal).Value = discount1;
+                        cmd.Parameters.Add("@Discount2", SqlDbType.Decimal).Value = discount2;
+                        //cmd.Parameters.Add("@ExpiredDate", SqlDbType.DateTime).Value = expiredate;
+                        cmd.Parameters.Add("@UserName", SqlDbType.VarChar).Value = Tools.getCookieData<string>(GlobalVariables.COOKIEDATA_USERNAME);
+
+                        if (sqlConnection.State != ConnectionState.Open)
+                            sqlConnection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    populateOrdersRepeater();
+                    populateInventoryRepeater(false);
+                    message.display("Submit berhasil");
+                }
+                catch (Exception ex) { message.error("Submit gagal. Hubungi administrator. Error: " + ex.Message); }
+            }
+        }
+
+        protected void ddlCustomers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            populateOrdersRepeater();
+        }
+
+        protected void chkShowQty_OnCheckedChanged(object sender, EventArgs e)
+        {
+            populateInventoryRepeater(false);
+        }
+        
+        protected void rptOrders_ItemCommand(object sender, RepeaterCommandEventArgs e)
+        {
+            if (((Button)e.CommandSource).ID == "btnStop")
+            {
+                try
+                {
+                    string sql = string.Format(@"
+                            UPDATE [DWSystem].[CustomerOrder] 
+                            SET Stop = 1,
+                                StopDate = CURRENT_TIMESTAMP,
+                                StopBy = (SELECT ID FROM DWSystem.Operator WHERE UserName = @UserName)
+                            WHERE CustomerOrderID = @CustomerOrderID
+                    ");
+
+                    using (SqlConnection sqlConnection = new SqlConnection(Settings.ConnectionString))
+                    using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.Add("@CustomerOrderID", SqlDbType.VarChar).Value = e.CommandArgument.ToString();
+                        cmd.Parameters.Add("@UserName", SqlDbType.VarChar).Value = Tools.getCookieData<string>(GlobalVariables.COOKIEDATA_USERNAME);
+
+                        if (sqlConnection.State != ConnectionState.Open)
+                            sqlConnection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    populateOrdersRepeater();
+                    if (rptInventory.Visible)
+                        populateInventoryRepeater(false);
+                    message.display("Stop berhasil");
+                }
+                catch (Exception ex) { message.error("Stop gagal. Hubungi administrator. Error: " + ex.Message); }
+            }
+            else if (((Button)e.CommandSource).ID == "btnUpdate")
+            {
+                decimal price = 0;
+                if (!Decimal.TryParse(((HtmlGenericControl)e.Item.FindControl("spanPrice")).InnerText, out price))
+                {
+                    message.error("Price is Invalid");
+                    return;
+                }
+                int pendingQty;
+                if (!Int32.TryParse(((TextBox)e.Item.FindControl("txtPendingQty")).Text, out pendingQty))
+                {
+                    message.error("Invalid Pending QTY");
+                    SetFocus(e.Item.FindControl("txtPendingQty"));
+                    return;
+                }
+                //DateTime expiredate = DateTime.Now;
+                //if (!DateTime.TryParseExact(((TextBox)e.Item.FindControl("txtExpireDate")).Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out expiredate))
+                //{
+                //    message.error("Select expire date");
+                //    SetFocus(e.Item.FindControl("txtExpireDate"));
+                //    return;
+                //}
+                decimal discount1 = 0;
+                if (!string.IsNullOrWhiteSpace(((TextBox)e.Item.FindControl("txtDiscount1")).Text) && !Decimal.TryParse(((TextBox)e.Item.FindControl("txtDiscount1")).Text, out discount1))
+                {
+                    message.error("Discount 1 is Invalid");
+                    SetFocus(e.Item.FindControl("txtDiscount1"));
+                    return;
+                }
+                decimal discount2 = 0;
+                if (!string.IsNullOrWhiteSpace(((TextBox)e.Item.FindControl("txtDiscount2")).Text) && !Decimal.TryParse(((TextBox)e.Item.FindControl("txtDiscount2")).Text, out discount2))
+                {
+                    message.error("Discount 2 is Invalid");
+                    SetFocus(e.Item.FindControl("txtDiscount2"));
+                    return;
+                }
+
+                try
+                {
+                    string sql = string.Format(@"
+                            UPDATE [DWSystem].[CustomerOrder] 
+                            SET Quantity = @PendingQuantity + DeliveredQuantity,
+                                Discount1 = @Discount1,
+                                Discount2 = @Discount2,
+                                Total = ((@PendingQuantity + DeliveredQuantity) * Price * (100-@Discount1)/100 * (100-Discount2)/100),
+                                ExpiredDate = null,
+                                LastUpdated = CURRENT_TIMESTAMP,
+                                UserID = (SELECT ID FROM DWSystem.Operator WHERE UserName = @UserName)
+                            WHERE CustomerOrderID = @CustomerOrderID
+                    ");
+
+                    using (SqlConnection sqlConnection = new SqlConnection(Settings.ConnectionString))
+                    using (SqlCommand cmd = new SqlCommand(sql, sqlConnection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Parameters.Add("@CustomerOrderID", SqlDbType.VarChar).Value = e.CommandArgument.ToString();
+                        cmd.Parameters.Add("@PendingQuantity", SqlDbType.Int).Value = pendingQty;
+                        cmd.Parameters.Add("@Discount1", SqlDbType.Decimal).Value = discount1;
+                        cmd.Parameters.Add("@Discount2", SqlDbType.Decimal).Value = discount2;
+                        //cmd.Parameters.Add("@ExpiredDate", SqlDbType.DateTime).Value = expiredate;
+                        cmd.Parameters.Add("@UserName", SqlDbType.VarChar).Value = Tools.getCookieData<string>(GlobalVariables.COOKIEDATA_USERNAME);
+
+                        if (sqlConnection.State != ConnectionState.Open)
+                            sqlConnection.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    populateOrdersRepeater();
+                    if(rptInventory.Visible)
+                        populateInventoryRepeater(false);
+                    message.display("Update berhasil");
+                }
+                catch (Exception ex) { message.error("Update gagal. Hubungi administrator. Error: " + ex.Message); }
+            }
+        }
+
+        protected void chkHasPendingOrders_CheckedChanged(object sender, EventArgs e)
+        {
+            DataTable data = DBUtil.getData(string.Format(@"
+                DECLARE @HasPendingOrdersOnly bit = '{1}'
+
+                SELECT Customer.*
+                FROM DWSystem.Customer
+                    LEFT OUTER JOIN (
+                            SELECT CustomerID, COUNT(CustomerOrder.CustomerID) AS PendingOrderCount
+                            FROM DWSystem.CustomerOrder
+                            WHERE 
+                                (Stop = 0 OR Stop IS NULL)
+                                AND CustomerOrder.Quantity - CustomerOrder.DeliveredQuantity > 0 
+                            GROUP BY CustomerOrder.CustomerID
+                        ) CustomerOrders ON CustomerOrders.CustomerID = Customer.CustomerID
+                WHERE
+                    ((SELECT SalesID FROM DWSystem.Operator WHERE UserName='{0}') IS NULL
+                        OR Customer.SalesID = (SELECT SalesID FROM DWSystem.Operator WHERE UserName='{0}')
+                    )
+                    AND (@HasPendingOrdersOnly = 0 OR CustomerOrders.PendingOrderCount > 0)
+                ORDER BY Name ASC;
+            ", Tools.getCookieData<string>(GlobalVariables.COOKIEDATA_USERNAME), chkHasPendingOrders.Checked));
+            
+
+            ddlCustomers.DataSource = data;
+            ddlCustomers.DataValueField = "CustomerID";
+            ddlCustomers.DataTextField = "Name";
+            ddlCustomers.DataBind();
+        }
+    }
+}

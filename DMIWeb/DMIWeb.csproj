@@ -165,6 +165,7 @@
     <Content Include="Images\Icons\Calendar_Button.png" />
     <Content Include="Orders\Default.aspx" />
     <Content Include="SalesApprovals\Default.aspx" />
+    <Content Include="Javascripts.aspx" />
     <Content Include="Scripts.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -228,6 +229,7 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
+    <Content Include="SiteLimitless.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -238,9 +240,9 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="OldLogin.aspx" />
     <Content Include="Styles\Main.css" />
     <Content Include="Login.aspx" />
+    <Content Include="TextFile1.txt" />
     <Content Include="UserControls\Message.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -262,13 +264,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="OldLogin.aspx.cs">
-      <DependentUpon>OldLogin.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="OldLogin.aspx.designer.cs">
-      <DependentUpon>OldLogin.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Orders\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -283,6 +278,13 @@
     </Compile>
     <Compile Include="SalesApprovals\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Javascripts.aspx.cs">
+      <DependentUpon>Javascripts.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Javascripts.aspx.designer.cs">
+      <DependentUpon>Javascripts.aspx</DependentUpon>
     </Compile>
     <Compile Include="Scripts.aspx.cs">
       <DependentUpon>Scripts.aspx</DependentUpon>
@@ -304,6 +306,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SiteLimitless.Master.cs">
+      <DependentUpon>SiteLimitless.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteLimitless.Master.designer.cs">
+      <DependentUpon>SiteLimitless.Master</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Message.ascx.cs">
       <DependentUpon>Message.ascx</DependentUpon>
