@@ -498,6 +498,9 @@ namespace DMIWeb.Orders
             ddlCustomers.DataValueField = "CustomerID";
             ddlCustomers.DataTextField = "Name";
             ddlCustomers.DataBind();
-        }
+
+			if (ddlCustomers.Items.Count > 0)
+				populateOrdersRepeater();
+		}
     }
 }
